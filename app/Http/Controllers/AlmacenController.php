@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AlmacenController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista y busca.
      */
     public function index(Request $request)
     {
@@ -26,7 +26,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Crear.
      */
     public function create()
     {
@@ -34,7 +34,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar.
      */
     public function store(Request $request)
     {
@@ -48,10 +48,7 @@ class AlmacenController extends Controller
             'estado' => 'required|string|max:50',
         ]);
 
-        // Combine capacidad_width and capacidad_height into a single string
         $validated['capacidad'] = $request->input('capacidad_width') . 'x' . $request->input('capacidad_height');
-
-        // Remove the individual width and height fields from the validated data
         unset($validated['capacidad_width'], $validated['capacidad_height']);
 
         Almacen::create($validated);
@@ -60,7 +57,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar.
      */
     public function show(Almacen $almacen)
     {
@@ -68,7 +65,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Editar.
      */
     public function edit(Almacen $almacen)
     {
@@ -76,7 +73,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar.
      */
     public function update(Request $request, Almacen $almacen)
     {
@@ -90,10 +87,7 @@ class AlmacenController extends Controller
             'estado' => 'required|string|max:50',
         ]);
 
-        // Combine capacidad_width and capacidad_height into a single string
         $validated['capacidad'] = $request->input('capacidad_width') . 'x' . $request->input('capacidad_height');
-
-        // Remove the individual width and height fields from the validated data
         unset($validated['capacidad_width'], $validated['capacidad_height']);
 
         $almacen->update($validated);
@@ -102,7 +96,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar.
      */
     public function destroy(Almacen $almacen)
     {

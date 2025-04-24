@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Cliente; // To reference the Cliente model
-use Illuminate\Http\Request; // To use the Request class
+use App\Models\Cliente;
+use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista y busca.
      */
     public function index(Request $request)
     {
@@ -25,7 +25,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Crear.
      */
     public function create()
     {
@@ -33,7 +33,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar.
      */
     public function store(Request $request)
     {
@@ -52,7 +52,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar.
      */
     public function show(Cliente $cliente)
     {
@@ -60,7 +60,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Editar.
      */
     public function edit(Cliente $cliente)
     {
@@ -68,7 +68,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar.
      */
     public function update(Request $request, Cliente $cliente)
     {
@@ -87,7 +87,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar.
      */
     public function destroy(Cliente $cliente)
     {
@@ -97,7 +97,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Search for a resource based on query.
+     * Buscar.
      */
     public function search(Request $request)
     {

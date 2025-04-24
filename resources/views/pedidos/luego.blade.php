@@ -7,6 +7,13 @@
 
     <h3>Seleccione el Almacen</h3>
 
+    <!-- Buscar -->
+    <form method="GET" action="{{ route('pedidos.luego') }}" class="d-inline-block mb-3">
+        <input type="hidden" name="cliente_id" value="{{ request('cliente_id') }}">
+        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Sector, Pasillo o Tipo" value="{{ request('query') }}">
+        <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
+    </form>
+
     <table class="table table-striped">
         <thead>
             <tr>

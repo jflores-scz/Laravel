@@ -4,7 +4,7 @@
 <div class="container">
     <h3>Seleccionar Cliente</h3>
 
-    <!-- Search Bar -->
+    <!-- Busqueda -->
     <form method="GET" action="{{ route('pedidos.create') }}" class="d-inline-block mb-3">
         <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por CI o Nombre" value="{{ request('query') }}">
         <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>

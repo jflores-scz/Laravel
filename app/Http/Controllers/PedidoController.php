@@ -10,11 +10,10 @@ use Illuminate\Http\Request;
 class PedidoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista, actualiza y busca.
      */
     public function index(Request $request)
     {
-        // Update the estado of all clientes and almacenes
         $this->updateClientesYAlmacenesEstado();
 
         $query = $request->get('query');
@@ -37,7 +36,7 @@ class PedidoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar pedido.
      */
     public function store(Request $request)
     {
@@ -59,7 +58,7 @@ class PedidoController extends Controller
     }
     
     /**
-     * Show the form for creating a new pedido.
+     * Crear pedido.
      */
     public function create(Request $request)
     {
@@ -69,16 +68,16 @@ class PedidoController extends Controller
             $clientes = Cliente::where('nombre', 'like', "%$query%")
                 ->orWhere('apellido', 'like', "%$query%")
                 ->orWhere('ci', 'like', "%$query%")
-                ->get(); // Fetch all results
+                ->get();
         } else {
-            $clientes = Cliente::all(); // Fetch all results
+            $clientes = Cliente::all();
         }
 
         return view('pedidos.create', compact('clientes', 'query'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Editar.
      */
     public function edit(Pedido $pedido)
     {
@@ -86,7 +85,7 @@ class PedidoController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar.
      */
     public function show(Pedido $pedido)
     {
@@ -94,7 +93,7 @@ class PedidoController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar.
      */
     public function update(Request $request, Pedido $pedido)
     {
@@ -132,9 +131,18 @@ class PedidoController extends Controller
         ]);
 
         $cliente_id = $request->input('cliente_id');
-        $almacenes = Almacen::all(); // Fetch all almacenes
+        $query = $request->input('query');
 
-        return view('pedidos.luego', compact('cliente_id', 'almacenes'));
+        if ($query) {
+            $almacenes = Almacen::where('sector', 'like', "%$query%")
+                ->orWhere('pasillo', 'like', "%$query%")
+                ->orWhere('tipo', 'like', "%$query%")
+                ->get();
+        } else {
+            $almacenes = Almacen::all();
+        }
+
+        return view('pedidos.luego', compact('cliente_id', 'almacenes', 'query'));
     }
 
     /**
@@ -149,37 +157,30 @@ class PedidoController extends Controller
         $cliente_id = session('cliente_id');
         $almacen_id = $request->input('almacen_id');
 
-        // Clear the cliente_id from the session
         session()->forget('cliente_id');
 
         return view('pedidos.final', compact('almacen_id', 'cliente_id'));
     }
 
     /**
-     * Update the estado of all clientes and almacenes.
+     * Update de estado para clientes and almacenes.
      */
     public function updateClientesYAlmacenesEstado()
     {
-        // Update estado for all clientes
         $clientes = Cliente::all();
 
         foreach ($clientes as $cliente) {
-            // Check if a pedido exists for the cliente
             $hasPedido = Pedido::where('cliente_id', $cliente->id)->exists();
 
-            // Update the estado based on whether a pedido exists
             $cliente->estado = $hasPedido ? 'Activo' : 'Inactivo';
             $cliente->save();
         }
 
-        // Update estado for all almacenes
         $almacenes = Almacen::all();
 
         foreach ($almacenes as $almacen) {
-            // Check if a pedido exists for the almacen
-            $hasPedido = Pedido::where('almacen_id', $almacen->id)->exists();
 
-            // Update the estado based on whether a pedido exists
+            $hasPedido = Pedido::where('almacen_id', $almacen->id)->exists();
             $almacen->estado = $hasPedido ? 'Activo' : 'Inactivo';
             $almacen->save();
         }
