@@ -43,11 +43,11 @@
                                         <td>{{ $cliente->ci }}</td>
                                         <td>{{ $cliente->telefono }}</td>
                                         <td>
-                                            <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning btn-sm">{{ __('Editar') }}</a>
+                                            <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-outline-warning">{{ __('Editar') }}</a>
                                             <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('¿Está seguro de eliminar este cliente?') }}')">
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este cliente?') }}')">
                                                     {{ __('Eliminar') }}
                                                 </button>
                                             </form>

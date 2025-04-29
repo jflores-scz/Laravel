@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h3>{{ __('Editar Pedido') }}</h3>
+    <h3>{{ __('Editar Alquiler') }}</h3>
     <p><strong>{{ __('ID del Pedido:') }}</strong> {{ $pedido->id }}</p>
 
     <div class="row justify-content-center">

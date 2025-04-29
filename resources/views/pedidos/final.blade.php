@@ -11,8 +11,8 @@
         <input type="hidden" name="cliente_id" value="{{ $cliente_id }}">
         <input type="hidden" name="almacen_id" value="{{ $almacen_id }}">
         <input type="hidden" name="estado" value="pago retrasado">
-        <input type="hidden" name="user_id" value="{{ auth()->id() }}"> <!-- Add the authenticated user's ID -->
-        <button type="submit" class="btn btn-success">Registrar Pedido</button>
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+        <button type="submit" class="btn btn-success">Registrar Orden</button>
     </form>
 </div>
 @endsection

@@ -6,7 +6,7 @@
         <div class="col-md-10">
             <div class="card">
                 <div class="card-header">
-                    {{ __('Lista de Pedidos') }}
+                    {{ __('Lista de Alquileres') }}
                     <form method="GET" action="{{ route('pedidos.index') }}" class="d-inline-block float-end">
                         <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Cliente, Almacén o Estado" value="{{ request('query') }}">
                         <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
@@ -21,7 +21,7 @@
                     @endif
 
                     @if ($pedidos->isEmpty())
-                        <p>{{ __('No hay pedidos registrados.') }}</p>
+                        <p>{{ __('No hay alquileres registrados.') }}</p>
                     @else
                         <table class="table table-striped">
                             <thead>
@@ -43,11 +43,11 @@
                                         <td>{{ $pedido->user->nombre }}</td>
                                         <td>{{ $pedido->estado }}</td>
                                         <td>
-                                            <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">{{ __('Editar') }}</a>
+                                            <a href="{{ route('pedidos.edit', $pedido->id) }}" cclass="btn btn-outline-warning">{{ __('Editar') }}</a>
                                             <form action="{{ route('pedidos.destroy', $pedido->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('¿Está seguro de eliminar este pedido?') }}')">
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este pedido?') }}')">
                                                     {{ __('Eliminar') }}
                                                 </button>
                                             </form>

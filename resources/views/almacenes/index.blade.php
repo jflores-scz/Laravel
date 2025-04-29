@@ -47,11 +47,11 @@
                                         <td>{{ $almacen->tipo }}</td>
                                         <td>{{ $almacen->estado }}</td>
                                         <td>
-                                            <a href="{{ route('almacenes.edit', $almacen->id) }}" class="btn btn-warning btn-sm">{{ __('Editar') }}</a>
+                                            <a href="{{ route('almacenes.edit', $almacen->id) }}" class="btn btn-outline-warning">{{ __('Editar') }}</a>
                                             <form action="{{ route('almacenes.destroy', $almacen->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('¿Está seguro de eliminar este almacén?') }}')">
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este almacén?') }}')">
                                                     {{ __('Eliminar') }}
                                                 </button>
                                             </form>
