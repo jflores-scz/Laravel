@@ -21,6 +21,7 @@ class User extends Authenticatable
         'nombre',
         'apellido',
         'ci',
+        'ci_extension',
         'telefono',
         'direccion',
         'estado',
