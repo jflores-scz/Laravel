@@ -22,19 +22,21 @@
         </thead>
         <tbody>
             @foreach($clientes as $cliente)
-            <tr>
-                <td>{{ $cliente->id }}</td>
-                <td>{{ $cliente->nombre }}</td>
-                <td>{{ $cliente->apellido }}</td>
-                <td>{{ $cliente->ci }}</td>
-                <td>
-                    <form action="{{ route('pedidos.luego') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="cliente_id" value="{{ $cliente->id }}">
-                        <button type="submit" class="btn btn-primary">Seleccionar</button>
-                    </form>
-                </td>
-            </tr>
+                @if ($cliente->estado !== 'Oculto') <!-- Ensure hidden clients are not shown -->
+                <tr>
+                    <td>{{ $cliente->id }}</td>
+                    <td>{{ $cliente->nombre }}</td>
+                    <td>{{ $cliente->apellido }}</td>
+                    <td>{{ $cliente->ci }}</td>
+                    <td>
+                        <form action="{{ route('pedidos.luego') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="cliente_id" value="{{ $cliente->id }}">
+                            <button type="submit" class="btn btn-primary">Seleccionar</button>
+                        </form>
+                    </td>
+                </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

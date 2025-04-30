@@ -18,19 +18,23 @@ class PedidoController extends Controller
 
         $query = $request->get('query');
 
-        if ($query) {
-            $pedidos = Pedido::with(['almacen', 'cliente', 'user'])
-                ->whereHas('cliente', function ($q) use ($query) {
-                    $q->where('nombre', 'like', "%$query%");
+        $pedidos = Pedido::with(['almacen', 'cliente', 'user'])
+            ->whereHas('cliente', function ($q) {
+                $q->where('estado', '!=', 'Oculto');
+            })
+            ->when($query, function ($q) use ($query) {
+                $q->whereHas('cliente', function ($q) use ($query) {
+                    $q->where('nombre', 'like', "%$query%")
+                      ->orWhere('apellido', 'like', "%$query%")
+                      ->orWhere('ci', 'like', "%$query%");
                 })
                 ->orWhereHas('almacen', function ($q) use ($query) {
-                    $q->where('nombre', 'like', "%$query%");
+                    $q->where('sector', 'like', "%$query%")
+                      ->orWhere('pasillo', 'like', "%$query%");
                 })
-                ->orWhere('estado', 'like', "%$query%")
-                ->paginate(10);
-        } else {
-            $pedidos = Pedido::with(['almacen', 'cliente', 'user'])->paginate(10);
-        }
+                ->orWhere('estado', 'like', "%$query%");
+            })
+            ->paginate(10);
 
         return view('pedidos.index', compact('pedidos'));
     }
@@ -65,12 +69,15 @@ class PedidoController extends Controller
         $query = $request->get('query');
 
         if ($query) {
-            $clientes = Cliente::where('nombre', 'like', "%$query%")
-                ->orWhere('apellido', 'like', "%$query%")
-                ->orWhere('ci', 'like', "%$query%")
+            $clientes = Cliente::where('estado', '!=', 'Oculto')
+                ->where(function ($q) use ($query) {
+                    $q->where('nombre', 'like', "%$query%")
+                      ->orWhere('apellido', 'like', "%$query%")
+                      ->orWhere('ci', 'like', "%$query%");
+                })
                 ->get();
         } else {
-            $clientes = Cliente::all();
+            $clientes = Cliente::where('estado', '!=', 'Oculto')->get();
         }
 
         return view('pedidos.create', compact('clientes', 'query'));
@@ -97,19 +104,13 @@ class PedidoController extends Controller
      */
     public function update(Request $request, Pedido $pedido)
     {
-        $request->validate([
-            'almacen_id' => 'required|exists:almacenes,id',
-            'cliente_id' => 'required|exists:clientes,id',
-            'estado' => 'required|string|max:255',
+        $validated = $request->validate([
+            'estado' => 'required|string|in:Pago Retrasado,Pago al Día',
         ]);
 
-        $pedido->update([
-            'almacen_id' => $request->almacen_id,
-            'cliente_id' => $request->cliente_id,
-            'estado' => $request->estado,
-        ]);
+        $pedido->update($validated);
 
-        return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado exitosamente.');
+        return redirect()->route('pedidos.edit', $pedido->id)->with('success', 'Estado actualizado correctamente.');
     }
 
     /**
@@ -130,19 +131,24 @@ class PedidoController extends Controller
             'cliente_id' => 'required|exists:clientes,id',
         ]);
 
-        $cliente_id = $request->input('cliente_id');
+        // Store cliente_id in the session
+        session(['cliente_id' => $request->input('cliente_id')]);
+
         $query = $request->input('query');
 
         if ($query) {
-            $almacenes = Almacen::where('sector', 'like', "%$query%")
-                ->orWhere('pasillo', 'like', "%$query%")
-                ->orWhere('tipo', 'like', "%$query%")
+            $almacenes = Almacen::where('estado', '!=', 'Oculto')
+                ->where(function ($q) use ($query) {
+                    $q->where('sector', 'like', "%$query%")
+                      ->orWhere('pasillo', 'like', "%$query%")
+                      ->orWhere('tipo', 'like', "%$query%");
+                })
                 ->get();
         } else {
-            $almacenes = Almacen::all();
+            $almacenes = Almacen::where('estado', '!=', 'Oculto')->get();
         }
 
-        return view('pedidos.luego', compact('cliente_id', 'almacenes', 'query'));
+        return view('pedidos.luego', compact('almacenes', 'query'));
     }
 
     /**
@@ -167,7 +173,7 @@ class PedidoController extends Controller
      */
     public function updateClientesYAlmacenesEstado()
     {
-        $clientes = Cliente::all();
+        $clientes = Cliente::where('estado', '!=', 'Oculto')->get();
 
         foreach ($clientes as $cliente) {
             $hasPedido = Pedido::where('cliente_id', $cliente->id)->exists();
@@ -176,11 +182,11 @@ class PedidoController extends Controller
             $cliente->save();
         }
 
-        $almacenes = Almacen::all();
+        $almacenes = Almacen::where('estado', '!=', 'Oculto')->get();
 
         foreach ($almacenes as $almacen) {
-
             $hasPedido = Pedido::where('almacen_id', $almacen->id)->exists();
+
             $almacen->estado = $hasPedido ? 'Activo' : 'Inactivo';
             $almacen->save();
         }

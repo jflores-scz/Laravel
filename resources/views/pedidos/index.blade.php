@@ -43,11 +43,11 @@
                                         <td>{{ $pedido->user->nombre }}</td>
                                         <td>{{ $pedido->estado }}</td>
                                         <td>
-                                            <a href="{{ route('pedidos.edit', $pedido->id) }}" cclass="btn btn-outline-warning">{{ __('Editar') }}</a>
+                                            <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-outline-warning btn-sm">{{ __('Editar') }}</a>
                                             <form action="{{ route('pedidos.destroy', $pedido->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este pedido?') }}')">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('{{ __('¿Está seguro de eliminar este pedido?') }}')">
                                                     {{ __('Eliminar') }}
                                                 </button>
                                             </form>
@@ -56,9 +56,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="mt-3">
-                            {{ $pedidos->links() }}
-                        </div>
                         <div class="mt-3 d-flex justify-content-center">
                             {{ $pedidos->links('pagination::bootstrap-4') }}
                         </div>

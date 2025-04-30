@@ -61,7 +61,7 @@
                 </div>
                 <div class="mensage">
                     <h1>Bienvenido a la pagina principal</h1>
-                    <p>Una Empresa S.A.</p>
+                    <p>de la Empresa S.A.</p>
                 </div>
             </div>
         @else

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
@@ -14,11 +15,14 @@ class ClienteController extends Controller
         $query = $request->get('query');
 
         if ($query) {
-            $clientes = Cliente::where('ci', 'like', "%$query%")
-                               ->orWhere('nombre', 'like', "%$query%")
+            $clientes = Cliente::where('estado', '!=', 'Oculto')
+                               ->where(function ($q) use ($query) {
+                                   $q->where('ci', 'like', "%$query%")
+                                     ->orWhere('nombre', 'like', "%$query%");
+                               })
                                ->paginate(10);
         } else {
-            $clientes = Cliente::paginate(10);
+            $clientes = Cliente::where('estado', '!=', 'Oculto')->paginate(10);
         }
 
         return view('clientes.index', compact('clientes', 'query'));
@@ -40,11 +44,15 @@ class ClienteController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'ci' => 'required|string|unique:clientes',
+            'ci' => 'required|string|regex:/^\d{8}$/|unique:clientes',
+            'ci_extension' => 'required|string|in:LP,SC,CB,OR,PT,CH,TJ,BE,PA',
             'telefono' => 'required|string|max:15',
             'direccion' => 'nullable|string|max:255',
             'estado' => 'nullable|string|max:255',
         ]);
+
+        $validated['ci'] = $validated['ci'] . $validated['ci_extension'];
+        unset($validated['ci_extension']);
 
         Cliente::create($validated);
 
@@ -75,11 +83,15 @@ class ClienteController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'ci' => 'required|string|unique:clientes,ci,' . $cliente->id,
+            'ci' => 'required|string|regex:/^\d{8}$/|unique:clientes,ci,' . $cliente->id,
+            'ci_extension' => 'required|string|in:LP,SC,CB,OR,PT,CH,TJ,BE,PA',
             'telefono' => 'required|string|max:15',
             'direccion' => 'nullable|string|max:255',
             'estado' => 'nullable|string|max:255',
         ]);
+
+        $validated['ci'] = $validated['ci'] . $validated['ci_extension'];
+        unset($validated['ci_extension']);
 
         $cliente->update($validated);
 
@@ -91,9 +103,9 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        $cliente->delete();
+        $cliente->update(['estado' => 'Oculto']);
 
-        return redirect()->route('clientes.index')->with('status', 'Cliente eliminado exitosamente.');
+        return redirect()->route('clientes.index')->with('status', 'Cliente ocultado exitosamente.');
     }
 
     /**
@@ -108,5 +120,4 @@ class ClienteController extends Controller
 
         return response()->json($clientes);
     }
-
 }

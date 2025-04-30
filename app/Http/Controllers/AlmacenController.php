@@ -14,13 +14,12 @@ class AlmacenController extends Controller
     {
         $query = $request->get('query');
 
-        if ($query) {
-            $almacenes = Almacen::where('capacidad', 'like', "%$query%")
-                                ->orWhere('tipo', 'like', "%$query%")
-                                ->paginate(10); 
-        } else {
-            $almacenes = Almacen::paginate(10);
-        }
+        $almacenes = Almacen::where('estado', '!=', 'Oculto')
+                        ->when($query, function ($q) use ($query) {
+                            $q->where('capacidad', 'like', "%$query%")
+                              ->orWhere('tipo', 'like', "%$query%");
+                        })
+                        ->paginate(10);
 
         return view('almacenes.index', compact('almacenes', 'query'));
     }
@@ -39,9 +38,9 @@ class AlmacenController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'sector' => 'required|string|max:50',
-            'pasillo' => 'required|string|max:50',
-            'numero' => 'required|string|max:50',
+            'sector' => 'required|string|regex:/^[A-Z]$/',
+            'pasillo' => 'required|integer|min:1|max:10',
+            'numero' => 'required|integer|min:1|max:999',
             'capacidad_width' => 'required|integer|min:1',
             'capacidad_height' => 'required|integer|min:1',
             'tipo' => 'required|string|max:50',
@@ -100,8 +99,8 @@ class AlmacenController extends Controller
      */
     public function destroy(Almacen $almacen)
     {
-        $almacen->delete();
+        $almacen->update(['estado' => 'Oculto']);
 
-        return redirect()->route('almacenes.index')->with('success', 'Almacén eliminado exitosamente.');
+        return redirect()->route('almacenes.index')->with('success', 'Almacén ocultado exitosamente.');
     }
 }

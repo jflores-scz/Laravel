@@ -8,7 +8,8 @@
     <h3>Seleccione el Almacen</h3>
 
     <!-- Buscar -->
-    <form method="GET" action="{{ route('pedidos.luego') }}" class="d-inline-block mb-3">
+    <form method="POST" action="{{ route('pedidos.luego') }}" class="d-inline-block mb-3">
+        @csrf
         <input type="hidden" name="cliente_id" value="{{ request('cliente_id') }}">
         <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Sector, Pasillo o Tipo" value="{{ request('query') }}">
         <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
@@ -29,24 +30,26 @@
         </thead>
         <tbody>
             @foreach ($almacenes as $almacen)
-            <tr>
-                <td>{{ $almacen->id }}</td>
-                <td>{{ $almacen->sector }}</td>
-                <td>{{ $almacen->pasillo }}</td>
-                <td>{{ $almacen->numero }}</td>
-                <td>{{ $almacen->capacidad ?? __('N/A') }}</td>
-                <td>{{ $almacen->tipo }}</td>
-                <td>{{ $almacen->estado }}</td>
-                <td>
-                    <form action="{{ route('pedidos.final') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="almacen_id" value="{{ $almacen->id }}">
-                        <button type="submit" class="btn btn-primary" {{ $almacen->estado === 'Activo' ? 'disabled' : '' }}>
-                            Seleccionar
-                        </button>
-                    </form>
-                </td>
-            </tr>
+                @if ($almacen->estado !== 'Oculto') <!-- Ensure hidden almacenes are not shown -->
+                <tr>
+                    <td>{{ $almacen->id }}</td>
+                    <td>{{ $almacen->sector }}</td>
+                    <td>{{ $almacen->pasillo }}</td>
+                    <td>{{ $almacen->numero }}</td>
+                    <td>{{ $almacen->capacidad ?? __('N/A') }}</td>
+                    <td>{{ $almacen->tipo }}</td>
+                    <td>{{ $almacen->estado }}</td>
+                    <td>
+                        <form action="{{ route('pedidos.final') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="almacen_id" value="{{ $almacen->id }}">
+                            <button type="submit" class="btn btn-primary" {{ $almacen->estado === 'Activo' ? 'disabled' : '' }}>
+                                Seleccionar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

@@ -47,8 +47,8 @@
                                             <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este cliente?') }}')">
-                                                    {{ __('Eliminar') }}
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de ocultar este cliente?') }}')">
+                                                    {{ __('Ocultar') }}
                                                 </button>
                                             </form>
                                         </td>
@@ -56,17 +56,14 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="mt-3">
-                            {{ $clientes->links() }}
-                        </div>
-                        @if (!$clientes->isEmpty())
-                            <div class="mt-3 d-flex justify-content-center">
-                                {{ $clientes->links('pagination::bootstrap-4') }}
-                            </div>
-                        @endif
                     @endif
                 </div>
             </div>
+            @if (!$clientes->isEmpty())
+                <div class="mt-3 d-flex justify-content-center">
+                    {{ $clientes->links('pagination::bootstrap-4') }}
+                </div>
+            @endif
         </div>
     </div>
 </div>

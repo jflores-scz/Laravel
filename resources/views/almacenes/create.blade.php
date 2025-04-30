@@ -23,7 +23,7 @@
 
                         <div class="mb-3">
                             <label for="sector" class="form-label">{{ __('Sector') }}</label>
-                            <input type="text" class="form-control @error('sector') is-invalid @enderror" id="sector" name="sector" value="{{ old('sector') }}" required>
+                            <input type="text" class="form-control @error('sector') is-invalid @enderror" id="sector" name="sector" value="{{ old('sector') }}" required pattern="[A-Z]" title="Debe ser una sola letra mayúscula (A-Z)">
                             @error('sector')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -33,7 +33,7 @@
 
                         <div class="mb-3">
                             <label for="pasillo" class="form-label">{{ __('Pasillo') }}</label>
-                            <input type="text" class="form-control @error('pasillo') is-invalid @enderror" id="pasillo" name="pasillo" value="{{ old('pasillo') }}" required>
+                            <input type="number" class="form-control @error('pasillo') is-invalid @enderror" id="pasillo" name="pasillo" value="{{ old('pasillo') }}" required min="1" max="10" title="Debe ser un número entre 1 y 10">
                             @error('pasillo')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -43,7 +43,7 @@
 
                         <div class="mb-3">
                             <label for="numero" class="form-label">{{ __('Número') }}</label>
-                            <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" value="{{ old('numero') }}" required>
+                            <input type="number" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" value="{{ old('numero') }}" required min="1" max="999" title="Debe ser un número entre 1 y 999">
                             @error('numero')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

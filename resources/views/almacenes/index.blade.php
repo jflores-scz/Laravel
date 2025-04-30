@@ -51,8 +51,8 @@
                                             <form action="{{ route('almacenes.destroy', $almacen->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de eliminar este almacén?') }}')">
-                                                    {{ __('Eliminar') }}
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ __('¿Está seguro de ocultar este almacén?') }}')">
+                                                    {{ __('Ocultar') }}
                                                 </button>
                                             </form>
                                         </td>
