@@ -21,7 +21,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Empresa S.A.
+                    Almacenaje Plus
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -49,7 +49,7 @@
                                     <li><a class="dropdown-item" href="{{ route('almacenes.create') }}">Registrar Almacén</a></li>
                                     <li><a class="dropdown-item" href="{{ route('almacenes.index') }}">Lista de Almacenes</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><span class="dropdown-item-text"><strong>Alquileres</strong></span></li>
+                                    <li><span class="dropdown-item-text"><strong>Contratos de Alquiler</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('pedidos.create') }}">Nuevo Alquiler</a></li>
                                     <li><a class="dropdown-item" href="{{ route('pedidos.index') }}">Lista de Alquileres</a></li>

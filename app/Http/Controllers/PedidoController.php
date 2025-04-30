@@ -131,12 +131,11 @@ class PedidoController extends Controller
             'cliente_id' => 'required|exists:clientes,id',
         ]);
 
-        // Store cliente_id in the session
         session(['cliente_id' => $request->input('cliente_id')]);
 
         $query = $request->input('query');
 
-        $almacenes = Almacen::where('estado', '!=', 'Oculto') // Exclude hidden almacenes
+        $almacenes = Almacen::where('estado', '!=', 'Oculto')
             ->when($query, function ($q) use ($query) {
                 $q->where('numero', 'like', "%$query%")
                   ->orWhere('capacidad', 'like', "%$query%")

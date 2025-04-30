@@ -74,7 +74,7 @@
                             <label for="tipo" class="form-label">{{ __('Tipo') }}</label>
                             <select class="form-select @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
                                 <option value="" disabled selected>Seleccione el tipo</option>
-                                <option value="Refrigerado">Refrigerado</option>
+                                <option value="Aclimatado">Aclimatado</option>
                                 <option value="Estandar">Estandar</option>
                             </select>
                             @error('tipo')

@@ -81,7 +81,7 @@
                             <label for="tipo" class="form-label text-secondary">{{ __('Tipo') }}</label>
                             <select class="form-select bg-light border-secondary @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
                                 <option value="" disabled>{{ __('Seleccione el tipo') }}</option>
-                                <option value="Refrigerado" {{ old('tipo', $almacen->tipo) == 'Refrigerado' ? 'selected' : '' }}>Refrigerado</option>
+                                <option value="Aclimatado" {{ old('tipo', $almacen->tipo) == 'Aclimatado' ? 'selected' : '' }}>Aclimatado</option>
                                 <option value="Estandar" {{ old('tipo', $almacen->tipo) == 'Estandar' ? 'selected' : '' }}>Estandar</option>
                             </select>
                             @error('tipo')

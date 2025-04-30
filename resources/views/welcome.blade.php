@@ -61,7 +61,8 @@
                 </div>
                 <div class="mensage">
                     <h1>Bienvenido a la pagina principal</h1>
-                    <p>de la Empresa S.A.</p>
+                    <p>de la Empresa Almacenaje Plus</p>
+                    <img src="{{ asset('OIP.jpg') }}" class="img-fluid mt-3" alt="Welcome Image">
                 </div>
             </div>
         @else

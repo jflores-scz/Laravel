@@ -72,7 +72,7 @@
 
                         <div class="mb-3">
                             <label for="telefono" class="form-label">{{ __('Teléfono') }}</label>
-                            <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono') }}" required>
+                            <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono') }}" required pattern="\d+" title="Solo se permiten números">
                             @error('telefono')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

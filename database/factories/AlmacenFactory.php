@@ -16,7 +16,7 @@ class AlmacenFactory extends Factory
             'pasillo' => $this->faker->numberBetween(1, 10),
             'numero' => $this->faker->numberBetween(1, 999),
             'capacidad' => $this->faker->numberBetween(1, 10) . 'x' . $this->faker->numberBetween(1, 10),
-            'tipo' => $this->faker->randomElement(['Refrigerado', 'Estandar']),
+            'tipo' => $this->faker->randomElement(['Aclimatado', 'Estandar']),
             'estado' => 'Inactivo',
         ];
     }

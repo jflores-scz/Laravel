@@ -14,7 +14,7 @@ class AlmacenController extends Controller
     {
         $query = $request->get('query');
 
-        $almacenes = Almacen::where('estado', '!=', 'Oculto') // Exclude hidden almacenes
+        $almacenes = Almacen::where('estado', '!=', 'Oculto') 
                         ->when($query, function ($q) use ($query) {
                             $q->where('numero', 'like', "%$query%")
                               ->orWhere('capacidad', 'like', "%$query%")
