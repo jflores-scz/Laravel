@@ -8,11 +8,17 @@
     <h3>Seleccione el Almacen</h3>
 
     <!-- Buscar -->
-    <form method="POST" action="{{ route('pedidos.luego') }}" class="d-inline-block mb-3">
+    <form method="POST" action="{{ route('pedidos.luego') }}" class="mb-3">
         @csrf
-        <input type="hidden" name="cliente_id" value="{{ request('cliente_id') }}">
-        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Sector, Pasillo o Tipo" value="{{ request('query') }}">
-        <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
+        <input type="hidden" name="cliente_id" value="{{ session('cliente_id') }}">
+        <div class="row">
+            <div class="col-md-8">
+                <input type="text" name="query" class="form-control" placeholder="Buscar por Número, Capacidad o Tipo" value="{{ request('query') }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary btn-block">{{ __('Buscar') }}</button>
+            </div>
+        </div>
     </form>
 
     <table class="table table-striped">

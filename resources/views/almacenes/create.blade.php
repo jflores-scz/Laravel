@@ -54,9 +54,9 @@
                         <div class="mb-3">
                             <label for="capacidad" class="form-label">{{ __('Capacidad en metros') }}</label>
                             <div class="input-group">
-                                <input type="number" class="form-control @error('capacidad_width') is-invalid @enderror" id="capacidad_width" name="capacidad_width" value="{{ old('capacidad_width') }}" required placeholder="Largo" min="1">
+                                <input type="number" class="form-control @error('capacidad_width') is-invalid @enderror" id="capacidad_width" name="capacidad_width" value="{{ old('capacidad_width') }}" required placeholder="Largo" min="1" max="10">
                                 <span class="input-group-text">x</span>
-                                <input type="number" class="form-control @error('capacidad_height') is-invalid @enderror" id="capacidad_height" name="capacidad_height" value="{{ old('capacidad_height') }}" required placeholder="Ancho" min="1">
+                                <input type="number" class="form-control @error('capacidad_height') is-invalid @enderror" id="capacidad_height" name="capacidad_height" value="{{ old('capacidad_height') }}" required placeholder="Ancho" min="1" max="10">
                             </div>
                             @error('capacidad_width')
                                 <span class="invalid-feedback" role="alert">

@@ -7,9 +7,15 @@
             <div class="card">
                 <div class="card-header">
                     {{ __('Lista de Alquileres') }}
-                    <form method="GET" action="{{ route('pedidos.index') }}" class="d-inline-block float-end">
-                        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Cliente, Almacén o Estado" value="{{ request('query') }}">
-                        <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
+                    <form method="GET" action="{{ route('pedidos.index') }}" class="d-inline-block w-100">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" name="query" class="form-control" placeholder="Buscar por Cliente, Almacén o Estado" value="{{ request('query') }}">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
 

@@ -136,17 +136,13 @@ class PedidoController extends Controller
 
         $query = $request->input('query');
 
-        if ($query) {
-            $almacenes = Almacen::where('estado', '!=', 'Oculto')
-                ->where(function ($q) use ($query) {
-                    $q->where('sector', 'like', "%$query%")
-                      ->orWhere('pasillo', 'like', "%$query%")
-                      ->orWhere('tipo', 'like', "%$query%");
-                })
-                ->get();
-        } else {
-            $almacenes = Almacen::where('estado', '!=', 'Oculto')->get();
-        }
+        $almacenes = Almacen::where('estado', '!=', 'Oculto') // Exclude hidden almacenes
+            ->when($query, function ($q) use ($query) {
+                $q->where('numero', 'like', "%$query%")
+                  ->orWhere('capacidad', 'like', "%$query%")
+                  ->orWhere('tipo', 'like', "%$query%");
+            })
+            ->get();
 
         return view('pedidos.luego', compact('almacenes', 'query'));
     }

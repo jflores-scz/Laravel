@@ -4,10 +4,16 @@
 <div class="container">
     <h3>Seleccionar Cliente</h3>
 
-    <!-- Busqueda -->
-    <form method="GET" action="{{ route('pedidos.create') }}" class="d-inline-block mb-3">
-        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por CI o Nombre" value="{{ request('query') }}">
-        <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
+    <!-- Buscar -->
+    <form method="GET" action="{{ route('pedidos.create') }}" class="mb-3">
+        <div class="row">
+            <div class="col-md-8">
+                <input type="text" name="query" class="form-control" placeholder="Buscar por CI o Nombre" value="{{ request('query') }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary btn-block">{{ __('Buscar') }}</button>
+            </div>
+        </div>
     </form>
 
     <table class="table table-striped">
