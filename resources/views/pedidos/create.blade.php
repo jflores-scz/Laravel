@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             @foreach($clientes as $cliente)
-                @if ($cliente->estado !== 'Oculto') <!-- Ensure hidden clients are not shown -->
+                @if ($cliente->estado !== 'Oculto')
                 <tr>
                     <td>{{ $cliente->id }}</td>
                     <td>{{ $cliente->nombre }}</td>

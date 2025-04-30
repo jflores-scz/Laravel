@@ -30,7 +30,7 @@
         </thead>
         <tbody>
             @foreach ($almacenes as $almacen)
-                @if ($almacen->estado !== 'Oculto') <!-- Ensure hidden almacenes are not shown -->
+                @if ($almacen->estado !== 'Oculto')
                 <tr>
                     <td>{{ $almacen->id }}</td>
                     <td>{{ $almacen->sector }}</td>
