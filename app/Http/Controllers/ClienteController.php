@@ -41,10 +41,13 @@ class ClienteController extends Controller
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'ci' => 'required|string|unique:clientes',
-            'telefono' => 'required|string|max:15',
-            'direccion' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:30|unique:clientes',
+            'password' => 'required|string|min:8|regex:/^[a-zA-Z0-9\-\.\_\*]+$/|max:30', // removed 'confirmed'
+            'rol' => 'required|string|max:255',
             'estado' => 'nullable|string|max:255',
         ]);
+
+        $validated['password'] = bcrypt($validated['password']);
 
         Cliente::create($validated);
 
@@ -75,11 +78,29 @@ class ClienteController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'ci' => 'required|string|unique:clientes,ci,' . $cliente->id,
-            'telefono' => 'required|string|max:15',
-            'direccion' => 'nullable|string|max:255',
-            'estado' => 'nullable|string|max:255',
+            'ci_number' => ['required', 'numeric', 'digits_between:6,10'], // Example validation for CI number
+            'ci_extension' => ['required', 'string', 'in:CH,LP,CB,OR,PT,TJ,SC,BN,PA'], // Example validation for CI extension
+            'email' => 'required|string|email|max:30|unique:clientes,email,' . $cliente->id,
+            'password' => 'nullable|string|min:8|regex:/^[a-zA-Z0-9\-\.\_\*]+$/|confirmed|max:30', // Password is nullable on update
+            'rol' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
         ]);
+
+        // Combine ci_number and ci_extension
+        $validated['ci'] = $validated['ci_number'] . $validated['ci_extension'];
+        unset($validated['ci_number']);
+        unset($validated['ci_extension']);
+
+        // Check for unique CI after combination, excluding current client
+        if (Cliente::where('ci', $validated['ci'])->where('id', '!=', $cliente->id)->exists()) {
+            return back()->withErrors(['ci_number' => 'El C.I. ya ha sido registrado.'])->withInput();
+        }
+
+        if (isset($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']); // Don't update password if not provided
+        }
 
         $cliente->update($validated);
 

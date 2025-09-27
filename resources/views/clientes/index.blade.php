@@ -30,7 +30,9 @@
                                     <th>{{ __('Nombre') }}</th>
                                     <th>{{ __('Apellido') }}</th>
                                     <th>{{ __('CI') }}</th>
-                                    <th>{{ __('Teléfono') }}</th>
+                                    <th>{{ __('Correo Electrónico') }}</th>
+                                    <th>{{ __('Rol') }}</th>
+                                    <th>{{ __('Estado') }}</th>
                                     <th>{{ __('Acciones') }}</th>
                                 </tr>
                             </thead>
@@ -41,7 +43,9 @@
                                         <td>{{ $cliente->nombre }}</td>
                                         <td>{{ $cliente->apellido }}</td>
                                         <td>{{ $cliente->ci }}</td>
-                                        <td>{{ $cliente->telefono }}</td>
+                                        <td>{{ $cliente->email }}</td>
+                                        <td>{{ $cliente->rol }}</td>
+                                        <td>{{ $cliente->estado }}</td>
                                         <td>
                                             <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning btn-sm">{{ __('Editar') }}</a>
                                             <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display: inline-block;">

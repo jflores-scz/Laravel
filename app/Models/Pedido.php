@@ -15,18 +15,18 @@ class Pedido extends Model
      * @var array
      */
     protected $fillable = [
-        'almacen_id',
+        'libro_id',
         'cliente_id',
         'user_id',
         'estado',
     ];
 
     /**
-     * Get the almacen associated with the pedido.
+     * Get the libro associated with the pedido.
      */
-    public function almacen()
+    public function libro()
     {
-        return $this->belongsTo(Almacen::class);
+        return $this->belongsTo(Libro::class);
     }
 
     /**

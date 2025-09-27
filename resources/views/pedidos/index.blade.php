@@ -8,7 +8,7 @@
                 <div class="card-header">
                     {{ __('Lista de Pedidos') }}
                     <form method="GET" action="{{ route('pedidos.index') }}" class="d-inline-block float-end">
-                        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Cliente, Almacén o Estado" value="{{ request('query') }}">
+                        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Cliente, Libro o Estado" value="{{ request('query') }}">
                         <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
                     </form>
                 </div>

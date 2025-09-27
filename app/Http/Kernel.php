@@ -65,4 +65,15 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+    /**
+     * The application's route middleware.
+     *
+     * These middleware are assigned to specific routes and are run during the request lifecycle.
+     *
+     * @var array<string, class-string|string>
+     */
+    protected $routeMiddleware = [
+        'cliente.auth' => \App\Http\Middleware\ClienteAuth::class,
+    ];
 }

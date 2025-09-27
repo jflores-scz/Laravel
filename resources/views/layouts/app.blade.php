@@ -30,6 +30,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('libros.catalogo') }}">{{ __('Consultar Catalogo') }}</a>
+                        </li>
+                        @if (Session::has('cliente_id'))
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Prestamos
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Ver Prestamos</a></li>
+                                    <li><a class="dropdown-item" href="#">Ver Multas</a></li>
+                                </ul>
+                            </li>
+                        @endif
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{{ url('/home') }}">Inicio</a>
@@ -44,10 +58,10 @@
                                     <li><a class="dropdown-item" href="{{ route('clientes.create') }}">Registrar Cliente</a></li>
                                     <li><a class="dropdown-item" href="{{ route('clientes.index') }}">Lista de Clientes</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><span class="dropdown-item-text"><strong>Almacenes</strong></span></li>
+                                    <li><span class="dropdown-item-text"><strong>Libros</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('almacenes.create') }}">Registrar Almacén</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('almacenes.index') }}">Lista de Almacenes</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('libros.create') }}">Registrar Libro</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('libros.index') }}">Lista de Libros</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Ordenes</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
@@ -61,19 +75,51 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        @guest
+                        @if (Auth::check() || Session::has('cliente_id'))
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    🔔
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        No new notifications
+                                    </a>
+                                </div>
+                            </li>
+                        @endif
+
+                        @if (!Auth::check() && !Session::has('cliente_id'))
                             @if (Route::has('login') && Route::currentRouteName() !== 'login')
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
-                            @if (Route::has('register') && Route::currentRouteName() !== 'register')
+                            @if (Route::has('register') && Route::currentRouteName() !== 'register' && Route::currentRouteName() !== 'cliente.login')
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
+                            @if (Session::has('cliente_id'))
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Session::get('cliente_nombre') }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('cliente.logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form-cliente').submit();">
+                                        {{ __('Cerrar Sesion') }}
+                                    </a>
+
+                                    <form id="logout-form-cliente" action="{{ route('cliente.logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                            @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -88,10 +134,11 @@
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
-                                    </form>
+                                    </ar_form>
                                 </div>
                             </li>
-                        @endguest
+                            @endif
+                        @endif
                     </ul>
                 </div>
             </div>

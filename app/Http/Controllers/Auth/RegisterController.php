@@ -52,10 +52,7 @@ class RegisterController extends Controller
             'nombre' => ['required', 'string', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', 'max:255'], 
             'apellido' => ['required', 'string', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', 'max:255'], 
             'ci' => ['required', 'string', 'regex:/^\d{8}[a-zA-Z]{0,2}$/', 'unique:users'], 
-            'ci_extension' => ['required', 'string', 'in:LP,CB'],
-            'telefono' => ['required', 'string', 'regex:/^\d+$/', 'min:8', 'max:15'], 
-            'direccion' => ['required', 'string', 'max:50'], 
-            'estado' => ['required', 'string', 'max:20'], 
+            'ci_extension' => ['required', 'string', 'in:LP,SC,CB,OR,PT,CH,TJ,BE,PA'],
             'email' => ['required', 'string', 'email', 'max:30', 'unique:users'], 
             'password' => ['required', 'string', 'min:8', 'regex:/^[a-zA-Z0-9\-\.\_\*]+$/', 'confirmed', 'max:30'], // Letras, numeros , -, ., _, *
         ]);
@@ -75,9 +72,6 @@ class RegisterController extends Controller
             'nombre' => $data['nombre'],
             'apellido' => $data['apellido'],
             'ci' => $ci,
-            'telefono' => $data['telefono'],
-            'direccion' => $data['direccion'],
-            'estado' => $data['estado'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

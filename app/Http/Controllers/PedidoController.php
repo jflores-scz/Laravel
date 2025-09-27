@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pedido;
 use App\Models\Cliente;
-use App\Models\Almacen;
+use App\Models\Libro;
 use Illuminate\Http\Request;
 
 class PedidoController extends Controller
@@ -14,23 +14,21 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        // Update the estado of all clientes and almacenes
-        $this->updateClientesYAlmacenesEstado();
-
         $query = $request->get('query');
 
         if ($query) {
-            $pedidos = Pedido::with(['almacen', 'cliente', 'user'])
+            $pedidos = Pedido::with(['libro', 'cliente', 'user'])
                 ->whereHas('cliente', function ($q) use ($query) {
                     $q->where('nombre', 'like', "%$query%");
                 })
-                ->orWhereHas('almacen', function ($q) use ($query) {
-                    $q->where('nombre', 'like', "%$query%");
+                ->orWhereHas('libro', function ($q) use ($query) {
+                    $q->where('titulo', 'like', "%$query%")
+                     ->orWhere('isbn', 'like', "%$query%");
                 })
                 ->orWhere('estado', 'like', "%$query%")
                 ->paginate(10);
         } else {
-            $pedidos = Pedido::with(['almacen', 'cliente', 'user'])->paginate(10);
+            $pedidos = Pedido::with(['libro', 'cliente', 'user'])->paginate(10);
         }
 
         return view('pedidos.index', compact('pedidos'));
@@ -43,14 +41,14 @@ class PedidoController extends Controller
     {
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
-            'almacen_id' => 'required|exists:almacenes,id',
+            'libro_id' => 'required|exists:libros,id',
             'estado' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
         ]);
 
         Pedido::create([
             'cliente_id' => $request->cliente_id,
-            'almacen_id' => $request->almacen_id,
+            'libro_id' => $request->libro_id,
             'estado' => $request->estado,
             'user_id' => $request->user_id,
         ]);
@@ -99,13 +97,13 @@ class PedidoController extends Controller
     public function update(Request $request, Pedido $pedido)
     {
         $request->validate([
-            'almacen_id' => 'required|exists:almacenes,id',
+            'libro_id' => 'required|exists:libros,id',
             'cliente_id' => 'required|exists:clientes,id',
             'estado' => 'required|string|max:255',
         ]);
 
         $pedido->update([
-            'almacen_id' => $request->almacen_id,
+            'libro_id' => $request->libro_id,
             'cliente_id' => $request->cliente_id,
             'estado' => $request->estado,
         ]);
@@ -132,9 +130,9 @@ class PedidoController extends Controller
         ]);
 
         $cliente_id = $request->input('cliente_id');
-        $almacenes = Almacen::all(); // Fetch all almacenes
+        $libros = Libro::all(); // Fetch all libros
 
-        return view('pedidos.luego', compact('cliente_id', 'almacenes'));
+        return view('pedidos.luego', compact('cliente_id', 'libros'));
     }
 
     /**
@@ -143,22 +141,22 @@ class PedidoController extends Controller
     public function final(Request $request)
     {
         $request->validate([
-            'almacen_id' => 'required|exists:almacenes,id',
+            'libro_id' => 'required|exists:libros,id',
         ]);
 
         $cliente_id = session('cliente_id');
-        $almacen_id = $request->input('almacen_id');
+        $libro_id = $request->input('libro_id');
 
         // Clear the cliente_id from the session
         session()->forget('cliente_id');
 
-        return view('pedidos.final', compact('almacen_id', 'cliente_id'));
+        return view('pedidos.final', compact('libro_id', 'cliente_id'));
     }
 
     /**
-     * Update the estado of all clientes and almacenes.
+     * Update the estado of all clientes.
      */
-    public function updateClientesYAlmacenesEstado()
+    public function updateClientesEstado()
     {
         // Update estado for all clientes
         $clientes = Cliente::all();
@@ -170,18 +168,6 @@ class PedidoController extends Controller
             // Update the estado based on whether a pedido exists
             $cliente->estado = $hasPedido ? 'Activo' : 'Inactivo';
             $cliente->save();
-        }
-
-        // Update estado for all almacenes
-        $almacenes = Almacen::all();
-
-        foreach ($almacenes as $almacen) {
-            // Check if a pedido exists for the almacen
-            $hasPedido = Pedido::where('almacen_id', $almacen->id)->exists();
-
-            // Update the estado based on whether a pedido exists
-            $almacen->estado = $hasPedido ? 'Activo' : 'Inactivo';
-            $almacen->save();
         }
     }
 }
