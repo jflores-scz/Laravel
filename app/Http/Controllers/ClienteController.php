@@ -40,12 +40,20 @@ class ClienteController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'ci' => 'required|string|unique:clientes',
+            'ci_number' => ['required', 'numeric', 'digits_between:6,10'],
+            'ci_extension' => ['required', 'string', 'in:CH,LP,CB,OR,PT,TJ,SC,BN,PA'],
             'email' => 'required|string|email|max:30|unique:clientes',
-            'password' => 'required|string|min:8|regex:/^[a-zA-Z0-9\-\.\_\*]+$/|max:30', // removed 'confirmed'
+            'password' => 'required|string|min:8|regex:/^[a-zA-Z0-9\-\.\_\*]+$/|max:30',
             'rol' => 'required|string|max:255',
             'estado' => 'nullable|string|max:255',
         ]);
+
+        $validated['ci'] = $validated['ci_number'] . $validated['ci_extension'];
+        unset($validated['ci_number'], $validated['ci_extension']);
+
+        if (Cliente::where('ci', $validated['ci'])->exists()) {
+            return back()->withErrors(['ci_number' => 'El C.I. ya ha sido registrado.'])->withInput();
+        }
 
         $validated['password'] = bcrypt($validated['password']);
 

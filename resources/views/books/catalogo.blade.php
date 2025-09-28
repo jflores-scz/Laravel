@@ -7,15 +7,15 @@
             <div class="card">
                 <div class="card-header">
                     {{ __('Catálogo de Libros') }}
-                    <form method="GET" action="{{ route('libros.catalogo') }}" class="d-inline-block float-end">
+                    <form method="GET" action="{{ route('books.catalogo') }}" class="d-inline-block float-end">
                         <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Título o ISBN" value="{{ request('query') }}">
                         <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
                     </form>
                 </div>
 
                 <div class="card-body">
-                    @if ($libros->isEmpty())
-                        <p>No hay libros que coincidan con su búsqueda.</p>
+                    @if ($books->isEmpty())
+                        <p>No hay books que coincidan con su búsqueda.</p>
                     @else
                         <table class="table table-striped">
                             <thead>
@@ -25,23 +25,27 @@
                                     <th>ISBN</th>
                                     <th>Año</th>
                                     <th>Descripción</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($libros as $libro)
+                                @foreach ($books as $book)
                                     <tr>
-                                        <td>{{ $libro->titulo }}</td>
-                                        <td>{{ $libro->autor }}</td>
-                                        <td>{{ $libro->isbn }}</td>
-                                        <td>{{ $libro->anio }}</td>
-                                        <td>{{ $libro->descripcion }}</td>
+                                        <td>{{ $book->titulo }}</td>
+                                        <td>{{ $book->autor }}</td>
+                                        <td>{{ $book->isbn }}</td>
+                                        <td>{{ $book->anio }}</td>
+                                        <td>{{ $book->descripcion }}</td>
                                         <td>
-                                            @if ($libro->imagen_path)
-                                                <img src="{{ asset($libro->imagen_path) }}" alt="Imagen del libro" width="50">
-                                            @else
-                                                N/A
+                                            @if (Session::has('cliente_id'))
+                                                <a href="{{ route('prestamos.create', ['book' => $book->id]) }}" class="btn btn-primary btn-sm">Reservar</a>
                                             @endif
                                         </td>
+                                        @auth
+                                            <td>
+                                                <a href="{{ route('prestamos.admin_create_form', ['book' => $book->id]) }}" class="btn btn-info btn-sm">Crear Préstamo</a>
+                                            </td>
+                                        @endauth
                                     </tr>
                                 @endforeach
                             </tbody>

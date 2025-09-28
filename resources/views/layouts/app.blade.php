@@ -31,7 +31,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('libros.catalogo') }}">{{ __('Consultar Catalogo') }}</a>
+                            <a class="nav-link" href="{{ route('books.catalogo') }}">{{ __('Consultar Catalogo') }}</a>
                         </li>
                         @if (Session::has('cliente_id'))
                             <li class="nav-item dropdown">
@@ -39,8 +39,8 @@
                                     Prestamos
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Ver Prestamos</a></li>
-                                    <li><a class="dropdown-item" href="#">Ver Multas</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('prestamos.index') }}">Ver Prestamos</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('deudas.index') }}">Ver Multas</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -60,13 +60,13 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Libros</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('libros.create') }}">Registrar Libro</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('libros.index') }}">Lista de Libros</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('books.create') }}">Registrar Libro</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('books.index') }}">Lista de Libros</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><span class="dropdown-item-text"><strong>Ordenes</strong></span></li>
+                                    <li><span class="dropdown-item-text"><strong>Prestamos</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('pedidos.create') }}">Nueva Orden</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('pedidos.index') }}">Lista de Ordenes</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('pedidos.index') }}">Lista de Solicitudes</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('prestamos.returns.index') }}">Gestionar Devoluciones</a></li>
                                 </ul>
                             </li>
                         @endauth
@@ -81,9 +81,48 @@
                                     🔔
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">
-                                        No new notifications
-                                    </a>
+                                    @if (Session::has('cliente_id'))
+                                        @if ($lastPrestamo)
+                                            @php
+                                                $statusClass = 'text-secondary'; // Default neutral
+                                                switch ($lastPrestamo->estado_solicitud) {
+                                                    case 'Pendiente':
+                                                        $statusClass = 'text-info';
+                                                        break;
+                                                    case 'Aprobado':
+                                                        $statusClass = 'text-success';
+                                                        break;
+                                                    case 'Rechazado':
+                                                    case 'Cancelado':
+                                                        $statusClass = 'text-muted';
+                                                        break;
+                                                    case 'Atrasado':
+                                                        $statusClass = 'text-warning';
+                                                        break;
+                                                    case 'Devuelto':
+                                                        $statusClass = 'text-primary';
+                                                        break;
+                                                }
+                                            @endphp
+                                            <a class="dropdown-item {{ $statusClass }}" href="{{ route('prestamos.index') }}">
+                                                Tu último préstamo fue: {{ $lastPrestamo->estado_solicitud }}
+                                            </a>
+                                        @else
+                                            <a class="dropdown-item" href="#">
+                                                No tienes préstamos registrados.
+                                            </a>
+                                        @endif
+
+                                        @if ($hasPendingDeudas)
+                                            <a class="dropdown-item text-danger" href="{{ route('deudas.index') }}">
+                                                Tienes Multas por pagar, pasa por caja!
+                                            </a>
+                                        @endif
+                                    @else
+                                        <a class="dropdown-item" href="#">
+                                            Sin notificaciones nuevas.
+                                        </a>
+                                    @endif
                                 </div>
                             </li>
                         @endif
@@ -96,7 +135,7 @@
                             @endif
 
                             @if (Route::has('register') && Route::currentRouteName() !== 'register' && Route::currentRouteName() !== 'cliente.login')
-                                <li class="nav-item">
+                                <li class="nav-item d-none">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
@@ -134,7 +173,7 @@
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
-                                    </ar_form>
+                                    </form>
                                 </div>
                             </li>
                             @endif

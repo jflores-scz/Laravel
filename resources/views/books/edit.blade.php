@@ -18,7 +18,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('libros.update', $libro->id) }}">
+                    <form method="POST" action="{{ route('books.update', $libro->id) }}">
                         @csrf
                         @method('PUT')
                         
@@ -63,7 +63,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Actualizar</button>
-                        <a href="{{ route('libros.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{{ route('books.index') }}" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

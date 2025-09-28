@@ -54,13 +54,12 @@
                                     <option value="BN" {{ old('ci_extension') == 'BN' ? 'selected' : '' }}>BN</option>
                                     <option value="PA" {{ old('ci_extension') == 'PA' ? 'selected' : '' }}>PA</option>
                                 </select>
-                                @error('ci')
+                                @error('ci_number')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                            <input type="hidden" id="ci" name="ci" value="{{ old('ci') }}">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>

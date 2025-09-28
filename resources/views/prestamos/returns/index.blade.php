@@ -5,13 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">
-                    {{ __('Lista de Solicitudes de Préstamo') }}
-                    <form method="GET" action="{{ route('pedidos.index') }}" class="d-inline-block float-end">
-                        <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Título, Autor o Cliente" value="{{ request('query') }}">
-                        <button type="submit" class="btn btn-primary btn-sm mt-2">Buscar</button>
-                    </form>
-                </div>
+                <div class="card-header">{{ __('Gestión de Devoluciones de Préstamos') }}</div>
 
                 <div class="card-body">
                     @if (session('success'))
@@ -19,7 +13,6 @@
                             {{ session('success') }}
                         </div>
                     @endif
-
                     @if (session('error'))
                         <div class="alert alert-danger" role="alert">
                             {{ session('error') }}
@@ -27,18 +20,18 @@
                     @endif
 
                     @if ($prestamos->isEmpty())
-                        <p>{{ __('No hay solicitudes de préstamo pendientes.') }}</p>
+                        <p>No hay préstamos Aprobados o Atrasados para gestionar.</p>
                     @else
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>{{ __('ID') }}</th>
-                                    <th>{{ __('Libro') }}</th>
-                                    <th>{{ __('Cliente') }}</th>
-                                    <th>{{ __('Fecha Inicio') }}</th>
-                                    <th>{{ __('Fecha Final') }}</th>
-                                    <th>{{ __('Estado Solicitud') }}</th>
-                                    <th>{{ __('Acciones') }}</th>
+                                    <th>ID</th>
+                                    <th>Libro</th>
+                                    <th>Cliente</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Final (Esperada)</th>
+                                    <th>Estado Solicitud</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,7 +44,12 @@
                                         <td>{{ $prestamo->fecha_final }}</td>
                                         <td>{{ $prestamo->estado_solicitud }}</td>
                                         <td>
-                                            <a href="{{ route('pedidos.show', $prestamo->id) }}" class="btn btn-info btn-sm">{{ __('Ver Detalles') }}</a>
+                                            <form action="{{ route('prestamos.return', $prestamo->id) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Está seguro de marcar este préstamo como devuelto?')">
+                                                    Marcar como Devuelto
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

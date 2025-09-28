@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pedidos', function (Blueprint $table) {
+        Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('libro_id')->constrained('libros')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('estado');
+            $table->string('razon');
+            $table->date('fecha_inicio');
+            $table->date('fecha_devolucion')->nullable();
+            $table->date('fecha_final');
+            $table->string('estado_solicitud')->default('Pendiente');
+            $table->string('estado_devolucion')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pedidos');
+        Schema::dropIfExists('prestamos');
     }
 };

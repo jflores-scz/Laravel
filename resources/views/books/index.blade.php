@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     {{ __('Lista de Libros') }}
-                    <form method="GET" action="{{ route('libros.index') }}" class="d-inline-block float-end">
+                    <form method="GET" action="{{ route('books.index') }}" class="d-inline-block float-end">
                         <input type="text" name="query" class="form-control d-inline-block w-auto" placeholder="Buscar por Título o ISBN" value="{{ request('query') }}">
                         <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
                     </form>
@@ -20,10 +20,10 @@
                         </div>
                     @endif
 
-                    <a href="{{ route('libros.create') }}" class="btn btn-primary mb-3">Agregar Libro</a>
+                    <a href="{{ route('books.create') }}" class="btn btn-primary mb-3">Agregar Libro</a>
 
-                    @if ($libros->isEmpty())
-                        <p>No hay libros registrados.</p>
+                    @if ($books->isEmpty())
+                        <p>No hay books registrados.</p>
                     @else
                         <table class="table table-striped">
                             <thead>
@@ -33,27 +33,28 @@
                                     <th>Autor</th>
                                     <th>ISBN</th>
                                     <th>Año</th>
+                                    <th>Portada</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($libros as $libro)
+                                @foreach ($books as $libro)
                                     <tr>
-                                        <td>{{ $libro->id }}</td>
-                                        <td>{{ $libro->titulo }}</td>
-                                        <td>{{ $libro->autor }}</td>
-                                        <td>{{ $libro->isbn }}</td>
-                                        <td>{{ $libro->anio }}</td>
+                                        <td>{{ $book->id }}</td>
+                                        <td>{{ $book->titulo }}</td>
+                                        <td>{{ $book->autor }}</td>
+                                        <td>{{ $book->isbn }}</td>
+                                        <td>{{ $book->anio }}</td>
                                         <td>
-                                            @if ($libro->imagen_path)
-                                                <img src="{{ asset($libro->imagen_path) }}" alt="Imagen del libro" width="50">
+                                            @if ($book->portada)
+                                                <img src="{{ asset($book->portada) }}" alt="Portada del libro" width="50">
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('libros.edit', $libro->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                            <form action="{{ route('libros.destroy', $libro->id) }}" method="POST" style="display: inline-block;">
+                                            <a href="{{ route('books.edit', $book->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                            <form action="{{ route('books.destroy', $book->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este libro?')">
@@ -65,7 +66,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $libros->links() }}
+                        {{ $books->links() }}
                     @endif
                 </div>
             </div>

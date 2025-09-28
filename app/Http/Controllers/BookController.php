@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Libro;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
-class LibroController extends Controller
+class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,12 +13,12 @@ class LibroController extends Controller
     public function index(Request $request)
     {
         $query = $request->get('query');
-        $libros = Libro::when($query, function($q) use ($query) {
+        $books = Book::when($query, function($q) use ($query) {
             return $q->where('titulo', 'LIKE', "%$query%")
                     ->orWhere('isbn', 'LIKE', "%$query%");
         })->paginate(10);
         
-        return view('libros.index', compact('libros'));
+        return view('books.index', compact('books'));
     }
 
     /**
@@ -26,7 +26,7 @@ class LibroController extends Controller
      */
     public function create()
     {
-        return view('libros.create');
+        return view('books.create');
     }
 
     /**
@@ -37,22 +37,22 @@ class LibroController extends Controller
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
-            'isbn' => 'required|string|unique:libros,isbn|max:13',
+            'isbn' => 'required|string|unique:books,isbn|max:13',
             'anio' => 'required|integer|min:1000|max:' . date('Y'),
             'descripcion' => 'required|string',
-            'imagen' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml|max:2048',
+            'portada' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml|max:2048',
         ]);
 
-        if ($request->hasFile('imagen')) {
-            $imageName = time().'.'.$request->imagen->extension();
-            $request->imagen->move(public_path('libros'), $imageName);
-            $validated['imagen_path'] = 'libros/' . $imageName;
+        if ($request->hasFile('portada')) {
+            $imageName = time().'.'.$request->portada->extension();
+            $request->portada->move(public_path('books'), $imageName);
+            $validated['portada'] = 'books/' . $imageName;
         }
 
-        Libro::create($validated);
+        Book::create($validated);
 
-        return redirect()->route('libros.index')
-            ->with('success', 'Libro creado exitosamente.');
+        return redirect()->route('books.index')
+            ->with('success', 'Book creado exitosamente.');
     }
 
     /**
@@ -66,15 +66,15 @@ class LibroController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Libro $libro)
+    public function edit(Book $libro)
     {
-        return view('libros.edit', compact('libro'));
+        return view('books.edit', compact('libro'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Libro $libro)
+    public function update(Request $request, Book $libro)
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -86,29 +86,29 @@ class LibroController extends Controller
 
         $libro->update($validated);
 
-        return redirect()->route('libros.index')
-            ->with('success', 'Libro actualizado exitosamente.');
+        return redirect()->route('books.index')
+            ->with('success', 'Book actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Libro $libro)
+    public function destroy(Book $libro)
     {
         $libro->delete();
 
-        return redirect()->route('libros.index')
-            ->with('success', 'Libro eliminado exitosamente.');
+        return redirect()->route('books.index')
+            ->with('success', 'Book eliminado exitosamente.');
     }
 
     public function catalogo(Request $request)
     {
         $query = $request->get('query');
-        $libros = Libro::when($query, function($q) use ($query) {
+        $books = Book::when($query, function($q) use ($query) {
             return $q->where('titulo', 'LIKE', "%$query%")
                     ->orWhere('isbn', 'LIKE', "%$query%");
         })->get();
         
-        return view('libros.catalogo', compact('libros'));
+        return view('books.catalogo', compact('books'));
     }
 }
