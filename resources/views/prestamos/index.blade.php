@@ -32,8 +32,8 @@
                             <tbody>
                                 @foreach ($prestamos as $prestamo)
                                     <tr>
-                                        <td>{{ $prestamo->book->titulo }}</td>
-                                        <td>{{ $prestamo->book->autor }}</td>
+                                        <td>{{ $prestamo->libro->titulo }}</td>
+                                        <td>{{ $prestamo->libro->autor }}</td>
                                         <td>{{ $prestamo->fecha_inicio }}</td>
                                         <td>{{ $prestamo->fecha_devolucion ?? 'N/A' }}</td>
                                         <td>{{ $prestamo->fecha_final }}</td>

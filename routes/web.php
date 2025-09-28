@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\LibroController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\DeudaController;
@@ -32,10 +32,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('clientes', ClienteController::class);
 Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
 
-// Book Routes
-Route::resource('books', BookController::class);
-Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
-Route::get('/catalogo', [BookController::class, 'catalogo'])->name('books.catalogo');
+// Libro Routes
+Route::resource('libros', LibroController::class);
+Route::get('/libros/search', [LibroController::class, 'search'])->name('libros.search');
+Route::get('/catalogo', [LibroController::class, 'catalogo'])->name('libros.catalogo');
 
 // Pedido Routes (Original - commented out for Prestamo Admin)
 // Route::resource('pedidos', PedidoController::class);
@@ -51,7 +51,7 @@ Route::post('/pedidos/{prestamo}/admin-cancel', [PrestamoController::class, 'adm
 
 // Prestamo Routes
 Route::resource('prestamos', PrestamoController::class)->except(['show']);
-Route::get('prestamos/create/{book}', [PrestamoController::class, 'create'])->name('prestamos.create');
+Route::get('prestamos/create/{libro}', [PrestamoController::class, 'create'])->name('prestamos.create');
 Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index')->middleware('cliente.auth');
 Route::delete('/prestamos/{prestamo}/cancel', [PrestamoController::class, 'cancel'])->name('prestamos.cancel')->middleware('cliente.auth');
 
@@ -60,7 +60,7 @@ Route::get('/prestamos/returns', [PrestamoController::class, 'returnsIndex'])->n
 Route::post('/prestamos/{prestamo}/return', [PrestamoController::class, 'markAsReturned'])->name('prestamos.return')->middleware('auth');
 
 // Prestamo Admin Creation Routes
-Route::get('/prestamos/admin/create/{book}', [PrestamoController::class, 'adminCreateForm'])->name('prestamos.admin_create_form')->middleware('auth');
+Route::get('/prestamos/admin/create/{libro}', [PrestamoController::class, 'adminCreateForm'])->name('prestamos.admin_create_form')->middleware('auth');
 Route::post('/prestamos/admin/confirm', [PrestamoController::class, 'adminCreateConfirm'])->name('prestamos.admin_create_confirm')->middleware('auth');
 Route::post('/prestamos/admin/store', [PrestamoController::class, 'adminStore'])->name('prestamos.admin_store')->middleware('auth');
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+use App\Models\Libro;
 use App\Models\Cliente;
 use App\Models\Prestamo;
 use App\Models\Deuda;
@@ -15,7 +15,7 @@ class PrestamoController extends Controller
 {
     public function adminIndex()
     {
-        $prestamos = Prestamo::with(['book', 'cliente'])
+        $prestamos = Prestamo::with(['libro', 'cliente'])
                             ->where('estado_solicitud', 'Pendiente')
                             ->get();
 
@@ -52,7 +52,7 @@ class PrestamoController extends Controller
         $prestamo->save();
 
         // Cancel overlapping pending loans
-        $overlappingPrestamos = Prestamo::where('book_id', $prestamo->book_id)
+        $overlappingPrestamos = Prestamo::where('libro_id', $prestamo->libro_id)
             ->where('id', '!=', $prestamo->id)
             ->where('estado_solicitud', 'Pendiente')
             ->where(function ($query) use ($prestamo) {
@@ -90,7 +90,7 @@ class PrestamoController extends Controller
         }
 
         $clienteId = Session::get('cliente_id');
-        $prestamos = Prestamo::where('cliente_id', $clienteId)->with('book')->get();
+        $prestamos = Prestamo::where('cliente_id', $clienteId)->with('libro')->get();
 
         // Check for overdue loans and create Deudas
         foreach ($prestamos as $prestamo) {
@@ -109,7 +109,7 @@ class PrestamoController extends Controller
         return view('prestamos.index', compact('prestamos'));
     }
 
-    public function create(Book $book)
+    public function create(Libro $libro)
     {
         if (!Session::has('cliente_id')) {
             return redirect()->route('cliente.login')->with('error', 'Debes iniciar sesión para reservar un libro.');
@@ -118,7 +118,7 @@ class PrestamoController extends Controller
         $cliente = Cliente::find(Session::get('cliente_id'));
 
         // Calculate fecha_inicio for client view
-        $latestPrestamo = Prestamo::where('book_id', $book->id)
+        $latestPrestamo = Prestamo::where('libro_id', $libro->id)
                                 ->whereIn('estado_solicitud', ['Pendiente', 'Aprobado'])
                                 ->orderByDesc('fecha_final')
                                 ->first();
@@ -128,20 +128,20 @@ class PrestamoController extends Controller
             $fechaInicio = Carbon::parse($latestPrestamo->fecha_final)->addDay();
         }
 
-        return view('prestamos.create', compact('book', 'cliente', 'fechaInicio'));
+        return view('prestamos.create', compact('libro', 'cliente', 'fechaInicio'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'book_id' => 'required|exists:books,id',
+            'libro_id' => 'required|exists:libros,id',
             'cliente_id' => 'required|exists:clientes,id',
             'razon' => 'required|string|max:255',
             'fecha_final' => 'required|date|after:today',
         ]);
 
         // Calculate fecha_inicio
-        $latestPrestamo = Prestamo::where('book_id', $validated['book_id'])
+        $latestPrestamo = Prestamo::where('libro_id', $validated['libro_id'])
                                 ->whereIn('estado_solicitud', ['Pendiente', 'Aprobado'])
                                 ->orderByDesc('fecha_final')
                                 ->first();
@@ -157,7 +157,7 @@ class PrestamoController extends Controller
         }
 
         $prestamo = new Prestamo();
-        $prestamo->book_id = $validated['book_id'];
+        $prestamo->libro_id = $validated['libro_id'];
         $prestamo->cliente_id = $validated['cliente_id'];
         $prestamo->razon = $validated['razon'];
         $prestamo->fecha_inicio = $fechaInicio;
@@ -186,7 +186,7 @@ class PrestamoController extends Controller
 
     public function returnsIndex()
     {
-        $prestamos = Prestamo::with(['book', 'cliente'])
+        $prestamos = Prestamo::with(['libro', 'cliente'])
                             ->whereIn('estado_solicitud', ['Aprobado', 'Atrasado'])
                             ->get();
         return view('prestamos.returns.index', compact('prestamos'));
@@ -206,19 +206,19 @@ class PrestamoController extends Controller
     }
 
     // Admin methods for creating Prestamo
-    public function adminCreateForm(Book $book)
+    public function adminCreateForm(Libro $libro)
     {
-        return view('prestamos.admin_create_form', compact('book'));
+        return view('prestamos.admin_create_form', compact('libro'));
     }
 
     public function adminCreateConfirm(Request $request)
     {
         $request->validate([
-            'book_id' => 'required|exists:books,id',
+            'libro_id' => 'required|exists:libros,id',
             'cliente_ci' => 'required|string|min:8|max:10', // Assuming CI is 8-10 digits
         ]);
 
-        $book = Book::findOrFail($request->book_id);
+        $libro = Libro::findOrFail($request->libro_id);
         $cliente = Cliente::where('ci', 'like', $request->cliente_ci . '%')->first(); // Find by CI number
 
         if (!$cliente) {
@@ -226,7 +226,7 @@ class PrestamoController extends Controller
         }
 
         // Calculate fecha_inicio for admin confirmation view
-        $latestPrestamo = Prestamo::where('book_id', $book->id)
+        $latestPrestamo = Prestamo::where('libro_id', $libro->id)
                                 ->whereIn('estado_solicitud', ['Pendiente', 'Aprobado'])
                                 ->orderByDesc('fecha_final')
                                 ->first();
@@ -236,20 +236,20 @@ class PrestamoController extends Controller
             $fechaInicio = Carbon::parse($latestPrestamo->fecha_final)->addDay();
         }
 
-        return view('prestamos.admin_create_confirm_view', compact('book', 'cliente', 'fechaInicio'));
+        return view('prestamos.admin_create_confirm_view', compact('libro', 'cliente', 'fechaInicio'));
     }
 
     public function adminStore(Request $request)
     {
         $validated = $request->validate([
-            'book_id' => 'required|exists:books,id',
+            'libro_id' => 'required|exists:libros,id',
             'cliente_id' => 'required|exists:clientes,id',
             'razon' => 'required|string|max:255',
             'fecha_final' => 'required|date|after:today',
         ]);
 
         // Calculate fecha_inicio
-        $latestPrestamo = Prestamo::where('book_id', $validated['book_id'])
+        $latestPrestamo = Prestamo::where('libro_id', $validated['libro_id'])
                                 ->whereIn('estado_solicitud', ['Pendiente', 'Aprobado'])
                                 ->orderByDesc('fecha_final')
                                 ->first();
@@ -265,7 +265,7 @@ class PrestamoController extends Controller
         }
 
         $prestamo = new Prestamo();
-        $prestamo->book_id = $validated['book_id'];
+        $prestamo->libro_id = $validated['libro_id'];
         $prestamo->cliente_id = $validated['cliente_id'];
         $prestamo->razon = $validated['razon'];
         $prestamo->fecha_inicio = $fechaInicio;

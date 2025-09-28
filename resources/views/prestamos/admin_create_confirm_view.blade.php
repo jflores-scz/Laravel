@@ -28,14 +28,14 @@
                         </div>
                         <div class="col-md-6">
                             <h5>Detalles del Libro</h5>
-                            <p><strong>Título:</strong> {{ $book->titulo }}</p>
-                            <p><strong>Autor:</strong> {{ $book->autor }}</p>
-                            <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
-                            <p><strong>Año:</strong> {{ $book->anio }}</p>
+                            <p><strong>Título:</strong> {{ $libro->titulo }}</p>
+                            <p><strong>Autor:</strong> {{ $libro->autor }}</p>
+                            <p><strong>ISBN:</strong> {{ $libro->isbn }}</p>
+                            <p><strong>Año:</strong> {{ $libro->anio }}</p>
                             <p><strong>Fecha de Inicio Sugerida:</strong> {{ $fechaInicio->format('Y-m-d') }}</p>
-                            <p><strong>Descripción:</strong> {{ $book->descripcion }}</p>
-                            @if ($book->portada)
-                                <img src="{{ asset($book->portada) }}" alt="Portada del libro" width="100">
+                            <p><strong>Descripción:</strong> {{ $libro->descripcion }}</p>
+                            @if ($libro->portada)
+                                <img src="{{ asset($libro->portada) }}" alt="Portada del libro" width="100">
                             @endif
                         </div>
                     </div>
@@ -44,7 +44,7 @@
 
                     <form method="POST" action="{{ route('prestamos.admin_store') }}">
                         @csrf
-                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <input type="hidden" name="libro_id" value="{{ $libro->id }}">
                         <input type="hidden" name="cliente_id" value="{{ $cliente->id }}">
 
                         <div class="mb-3">
@@ -65,7 +65,7 @@
 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Confirmar Préstamo</button>
-                            <a href="{{ route('prestamos.admin_create_form', ['book' => $book->id]) }}" class="btn btn-secondary">Volver</a>
+                            <a href="{{ route('prestamos.admin_create_form', ['libro' => $libro->id]) }}" class="btn btn-secondary">Volver</a>
                         </div>
                     </form>
                 </div>

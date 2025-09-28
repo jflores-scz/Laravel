@@ -8,18 +8,18 @@
                 <div class="card-header">{{ __('Confirmar Reserva de Libro') }}</div>
 
                 <div class="card-body">
-                    <h5 class="card-title">{{ $book->titulo }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ $book->autor }}</h6>
-                    <p class="card-text"><strong>ISBN:</strong> {{ $book->isbn }}</p>
-                    <p class="card-text"><strong>Año:</strong> {{ $book->anio }}</p>
+                    <h5 class="card-title">{{ $libro->titulo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ $libro->autor }}</h6>
+                    <p class="card-text"><strong>ISBN:</strong> {{ $libro->isbn }}</p>
+                    <p class="card-text"><strong>Año:</strong> {{ $libro->anio }}</p>
                     <p class="card-text"><strong>Fecha de Inicio Sugerida:</strong> {{ $fechaInicio->format('Y-m-d') }}</p>
-                    <p class="card-text">{{ $book->descripcion }}</p>
+                    <p class="card-text">{{ $libro->descripcion }}</p>
 
                     <hr>
 
                     <form method="POST" action="{{ route('prestamos.store') }}">
                         @csrf
-                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <input type="hidden" name="libro_id" value="{{ $libro->id }}">
                         <input type="hidden" name="cliente_id" value="{{ $cliente->id }}">
 
                         <div class="mb-3">
@@ -40,7 +40,7 @@
 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
-                            <a href="{{ route('books.catalogo') }}" class="btn btn-secondary">Cancelar</a>
+                            <a href="{{ route('libros.catalogo') }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>

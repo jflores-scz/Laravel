@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Crear Préstamo para Libro: ') }}{{ $book->titulo }}</div>
+                <div class="card-header">{{ __('Crear Préstamo para Libro: ') }}{{ $libro->titulo }}</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -20,7 +20,7 @@
 
                     <form method="POST" action="{{ route('prestamos.admin_create_confirm') }}">
                         @csrf
-                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <input type="hidden" name="libro_id" value="{{ $libro->id }}">
 
                         <div class="mb-3">
                             <label for="cliente_ci" class="form-label">C.I. del Cliente</label>
@@ -32,7 +32,7 @@
                         
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Buscar Cliente</button>
-                            <a href="{{ route('books.catalogo') }}" class="btn btn-secondary">Cancelar</a>
+                            <a href="{{ route('libros.catalogo') }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>

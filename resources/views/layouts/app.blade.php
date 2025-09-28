@@ -31,7 +31,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('books.catalogo') }}">{{ __('Consultar Catalogo') }}</a>
+                            <a class="nav-link" href="{{ route('libros.catalogo') }}">{{ __('Consultar Catalogo') }}</a>
                         </li>
                         @if (Session::has('cliente_id'))
                             <li class="nav-item dropdown">
@@ -57,7 +57,7 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Libros</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('books.create') }}">Registrar Libro</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('libros.create') }}">Registrar Libro</a></li>
                                     
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Prestamos</strong></span></li>

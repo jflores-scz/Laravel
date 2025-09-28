@@ -15,7 +15,7 @@ class DeudaController extends Controller
         }
 
         $clienteId = Session::get('cliente_id');
-        $deudas = Deuda::where('cliente_id', $clienteId)->with(['prestamo.book'])->get();
+        $deudas = Deuda::where('cliente_id', $clienteId)->with(['prestamo.libro'])->get();
 
         return view('deudas.index', compact('deudas'));
     }

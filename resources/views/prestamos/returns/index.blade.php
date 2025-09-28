@@ -38,7 +38,7 @@
                                 @foreach ($prestamos as $prestamo)
                                     <tr>
                                         <td>{{ $prestamo->id }}</td>
-                                        <td>{{ $prestamo->book->titulo }} ({{ $prestamo->book->autor }})</td>
+                                        <td>{{ $prestamo->libro->titulo }} ({{ $prestamo->libro->autor }})</td>
                                         <td>{{ $prestamo->cliente->nombre }} {{ $prestamo->cliente->apellido }}</td>
                                         <td>{{ $prestamo->fecha_inicio }}</td>
                                         <td>{{ $prestamo->fecha_final }}</td>

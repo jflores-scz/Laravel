@@ -19,8 +19,8 @@
                         </div>
                     @endif
 
-                    <h5 class="card-title">Libro: {{ $prestamo->book->titulo }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Autor: {{ $prestamo->book->autor }}</h6>
+                    <h5 class="card-title">Libro: {{ $prestamo->libro->titulo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Autor: {{ $prestamo->libro->autor }}</h6>
                     <p class="card-text"><strong>Cliente:</strong> {{ $prestamo->cliente->nombre }} {{ $prestamo->cliente->apellido }}</p>
                     <p class="card-text"><strong>Razón:</strong> {{ $prestamo->razon }}</p>
                     <p class="card-text"><strong>Fecha de Solicitud:</strong> {{ $prestamo->fecha_inicio }}</p>

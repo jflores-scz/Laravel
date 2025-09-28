@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ClienteSeeder::class,
-            BookSeeder::class,
+            LibroSeeder::class,
         ]);
     }
 }

@@ -18,7 +18,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('books.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('libros.store') }}">
                         @csrf
                         <div class="mb-3">
                             <label for="titulo" class="form-label">Título</label>
@@ -60,13 +60,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="portada" class="form-label">Portada</label>
-                            <input type="file" class="form-control @error('portada') is-invalid @enderror" id="portada" name="portada">
-                            @error('portada')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        
 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Registrar</button>

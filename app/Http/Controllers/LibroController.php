@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+use App\Models\Libro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class BookController extends Controller
+class LibroController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +14,12 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $query = $request->get('query');
-        $books = Book::when($query, function($q) use ($query) {
+        $libros = Libro::when($query, function($q) use ($query) {
             return $q->where('titulo', 'LIKE', "%$query%")
                     ->orWhere('isbn', 'LIKE', "%$query%");
         })->paginate(10);
         
-        return view('books.index', compact('books'));
+        return view('libros.index', compact('libros'));
     }
 
     /**
@@ -27,7 +27,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        return view('libros.create');
     }
 
     /**
@@ -38,22 +38,16 @@ class BookController extends Controller
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
-            'isbn' => 'required|string|unique:books,isbn|max:13',
+            'isbn' => 'required|string|unique:libros,isbn|max:13',
             'anio' => 'required|integer|min:1000|max:' . date('Y'),
             'descripcion' => 'required|string',
-            'portada' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml|max:2048',
+            'portada' => 'nullable|string',
         ]);
 
-        if ($request->hasFile('portada')) {
-            $imageName = time().'.'.$request->portada->extension();
-            $request->portada->move(public_path('books'), $imageName);
-            $validated['portada'] = 'books/' . $imageName;
-        }
+        Libro::create($validated);
 
-        Book::create($validated);
-
-        return redirect()->route('books.index')
-            ->with('success', 'Book creado exitosamente.');
+        return redirect()->route('libros.index')
+            ->with('success', 'Libro creado exitosamente.');
     }
 
     /**
@@ -67,15 +61,15 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Book $book)
+    public function edit(Libro $libro)
     {
-        return view('books.edit', compact('book'));
+        return view('libros.edit', compact('libro'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, Libro $libro)
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -88,40 +82,40 @@ class BookController extends Controller
 
         if ($request->hasFile('portada')) {
             // Delete old image
-            if ($book->portada) {
-                Storage::delete('public/' . $book->portada);
+            if ($libro->portada) {
+                Storage::delete('public/' . $libro->portada);
             }
 
             $imageName = time().'.'.$request->portada->extension();
-            $request->portada->move(public_path('books'), $imageName);
-            $validated['portada'] = 'books/' . $imageName;
+            $request->portada->move(public_path('libros'), $imageName);
+            $validated['portada'] = 'libros/' . $imageName;
         }
 
-        $book->update($validated);
+        $libro->update($validated);
 
-        return redirect()->route('books.catalogo')
-            ->with('success', 'Book actualizado exitosamente.');
+        return redirect()->route('libros.catalogo')
+            ->with('success', 'Libro actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy(Libro $libro)
     {
-        $book->delete();
+        $libro->delete();
 
-        return redirect()->route('books.catalogo')
-            ->with('success', 'Book eliminado exitosamente.');
+        return redirect()->route('libros.catalogo')
+            ->with('success', 'Libro eliminado exitosamente.');
     }
 
     public function catalogo(Request $request)
     {
         $query = $request->get('query');
-        $books = Book::when($query, function($q) use ($query) {
+        $libros = Libro::when($query, function($q) use ($query) {
             return $q->where('titulo', 'LIKE', "%$query%")
                     ->orWhere('isbn', 'LIKE', "%$query%");
         })->get();
         
-        return view('books.catalogo', compact('books'));
+        return view('libros.catalogo', compact('libros'));
     }
 }
