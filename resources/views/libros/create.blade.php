@@ -24,7 +24,9 @@
                             <label for="titulo" class="form-label">Título</label>
                             <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo') }}" required>
                             @error('titulo')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
 
@@ -32,7 +34,9 @@
                             <label for="autor" class="form-label">Autor</label>
                             <input type="text" class="form-control @error('autor') is-invalid @enderror" id="autor" name="autor" value="{{ old('autor') }}" required>
                             @error('autor')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
 
@@ -40,7 +44,9 @@
                             <label for="isbn" class="form-label">ISBN</label>
                             <input type="text" class="form-control @error('isbn') is-invalid @enderror" id="isbn" name="isbn" value="{{ old('isbn') }}" required>
                             @error('isbn')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
 
@@ -48,7 +54,9 @@
                             <label for="anio" class="form-label">Año</label>
                             <input type="number" class="form-control @error('anio') is-invalid @enderror" id="anio" name="anio" value="{{ old('anio') }}" required>
                             @error('anio')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
 
@@ -56,15 +64,15 @@
                             <label for="descripcion" class="form-label">Descripción</label>
                             <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion" rows="3" required>{{ old('descripcion') }}</textarea>
                             @error('descripcion')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
 
-                        
-
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Registrar</button>
-                            <a href="{{ route('home') }}" class="btn btn-secondary">Cancelar</a>
+                            <a href="{{ route('libros.catalogo') }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>

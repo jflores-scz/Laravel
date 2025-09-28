@@ -59,6 +59,7 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('libros.create') }}">Registrar Libro</a></li>
                                     
+                                    
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Prestamos</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>

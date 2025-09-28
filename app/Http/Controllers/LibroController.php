@@ -39,14 +39,14 @@ class LibroController extends Controller
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string|unique:libros,isbn|max:13',
-            'anio' => 'required|integer|min:1000|max:' . date('Y'),
+            'anio' => 'required|integer|min:1000',
             'descripcion' => 'required|string',
             'portada' => 'nullable|string',
         ]);
 
         Libro::create($validated);
 
-        return redirect()->route('libros.index')
+        return redirect()->route('libros.catalogo')
             ->with('success', 'Libro creado exitosamente.');
     }
 
@@ -114,7 +114,7 @@ class LibroController extends Controller
         $libros = Libro::when($query, function($q) use ($query) {
             return $q->where('titulo', 'LIKE', "%$query%")
                     ->orWhere('isbn', 'LIKE', "%$query%");
-        })->get();
+        })->paginate(10);
         
         return view('libros.catalogo', compact('libros'));
     }

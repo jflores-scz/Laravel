@@ -34,14 +34,9 @@ Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clie
 
 // Libro Routes
 Route::resource('libros', LibroController::class);
+Route::get('/libros', [LibroController::class, 'catalogo'])->name('libros.index');
 Route::get('/libros/search', [LibroController::class, 'search'])->name('libros.search');
 Route::get('/catalogo', [LibroController::class, 'catalogo'])->name('libros.catalogo');
-
-// Pedido Routes (Original - commented out for Prestamo Admin)
-// Route::resource('pedidos', PedidoController::class);
-// Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
-// Route::post('/pedidos/luego', [PedidoController::class, 'luego'])->name('pedidos.luego');
-// Route::post('/pedidos/final', [PedidoController::class, 'final'])->name('pedidos.final');
 
 // Prestamo Admin Routes (repurposing Pedidos section)
 Route::get('/pedidos', [PrestamoController::class, 'adminIndex'])->name('pedidos.index')->middleware('auth');
