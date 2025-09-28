@@ -21,7 +21,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Empresa
+                    📚Saber+
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -45,9 +45,6 @@
                             </li>
                         @endif
                         @auth
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ url('/home') }}">Inicio</a>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Gestion de servicios
@@ -61,7 +58,7 @@
                                     <li><span class="dropdown-item-text"><strong>Libros</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('books.create') }}">Registrar Libro</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('books.index') }}">Lista de Libros</a></li>
+                                    
                                     <li><hr class="dropdown-divider"></li>
                                     <li><span class="dropdown-item-text"><strong>Prestamos</strong></span></li>
                                     <li><hr class="dropdown-divider"></li>

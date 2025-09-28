@@ -61,7 +61,7 @@
                 </div>
                 <div class="mensage">
                     <h1>Bienvenido a la pagina principal</h1>
-                    <p>Empresa Azul</p>
+                    <p>Biblioteca Saber+</p>
                 </div>
             </div>
         @else

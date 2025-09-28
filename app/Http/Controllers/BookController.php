@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -66,38 +67,50 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Book $libro)
+    public function edit(Book $book)
     {
-        return view('books.edit', compact('libro'));
+        return view('books.edit', compact('book'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $libro)
+    public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string',
             'anio' => 'required|integer|min:1000|max:' . date('Y'),
-            'descripcion' => 'required|string'
+            'descripcion' => 'required|string',
+            'portada' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml|max:2048',
         ]);
 
-        $libro->update($validated);
+        if ($request->hasFile('portada')) {
+            // Delete old image
+            if ($book->portada) {
+                Storage::delete('public/' . $book->portada);
+            }
 
-        return redirect()->route('books.index')
+            $imageName = time().'.'.$request->portada->extension();
+            $request->portada->move(public_path('books'), $imageName);
+            $validated['portada'] = 'books/' . $imageName;
+        }
+
+        $book->update($validated);
+
+        return redirect()->route('books.catalogo')
             ->with('success', 'Book actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $libro)
+    public function destroy(Book $book)
     {
-        $libro->delete();
+        $book->delete();
 
-        return redirect()->route('books.index')
+        return redirect()->route('books.catalogo')
             ->with('success', 'Book eliminado exitosamente.');
     }
 

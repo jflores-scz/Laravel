@@ -51,7 +51,24 @@ class PrestamoController extends Controller
         $prestamo->fecha_devolucion = now()->addDays(15); // Example: 15 days loan period
         $prestamo->save();
 
-        return redirect()->route('pedidos.index')->with('success', 'Préstamo aprobado exitosamente.');
+        // Cancel overlapping pending loans
+        $overlappingPrestamos = Prestamo::where('book_id', $prestamo->book_id)
+            ->where('id', '!=', $prestamo->id)
+            ->where('estado_solicitud', 'Pendiente')
+            ->where(function ($query) use ($prestamo) {
+                $query->where(function ($q) use ($prestamo) {
+                    $q->where('fecha_inicio', '<=', $prestamo->fecha_final)
+                        ->where('fecha_final', '>=', $prestamo->fecha_inicio);
+                });
+            })
+            ->get();
+
+        foreach ($overlappingPrestamos as $overlappingPrestamo) {
+            $overlappingPrestamo->estado_solicitud = 'Cancelado';
+            $overlappingPrestamo->save();
+        }
+
+        return redirect()->route('pedidos.index')->with('success', 'Préstamo aprobado exitosamente. Préstamos superpuestos han sido cancelados.');
     }
 
     public function adminCancel(Prestamo $prestamo)
