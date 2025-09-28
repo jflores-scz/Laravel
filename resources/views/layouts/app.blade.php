@@ -102,7 +102,7 @@
                                                 }
                                             @endphp
                                             <a class="dropdown-item {{ $statusClass }}" href="{{ route('prestamos.index') }}">
-                                                Tu último préstamo fue: {{ $lastPrestamo->estado_solicitud }}
+                                                Tu último préstamo: {{ $lastPrestamo->estado_solicitud }}
                                             </a>
                                         @else
                                             <a class="dropdown-item" href="#">
